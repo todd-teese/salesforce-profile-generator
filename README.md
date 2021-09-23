@@ -22,7 +22,7 @@ $ npm install -g salesforce-profile-generator
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
-salesforce-profile-generator/0.0.2 linux-x64 node-v14.17.6
+salesforce-profile-generator/0.0.3 linux-x64 node-v14.17.6
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -30,7 +30,29 @@ USAGE
 ```
 <!-- usagestop -->
 <!-- commands -->
+* [`sfdx generate:profile [-s <string>] [-t <string>] [-b] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-generateprofile--s-string--t-string--b---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 * [`sfdx hello:org [-n <string>] [-f] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-helloorg--n-string--f--v-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+
+## `sfdx generate:profile [-s <string>] [-t <string>] [-b] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
+
+Generate profiles based on CSV and JSON Files
+
+```
+Generate profiles based on CSV and JSON Files
+
+USAGE
+  $ sfdx generate:profile [-s <string>] [-t <string>] [-b] [--json] [--loglevel 
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
+
+OPTIONS
+  -b, --ignoreblank                                                                 Ignore blanks within CSV files?
+  -s, --source=source                                                               Source Folder to pull profiles from
+  -t, --target=target                                                               Target Folder to create profiles in
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
+```
 
 ## `sfdx hello:org [-n <string>] [-f] [-v <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -70,7 +92,7 @@ EXAMPLES
      Hello myname! This is org: MyOrg and I will be around until Tue Mar 20 2018!
 ```
 
-_See code: [lib/commands/hello/org.js](https://github.com/todd-teese/salesforce-profile-generator/blob/v0.0.2/lib/commands/hello/org.js)_
+_See code: [lib/commands/hello/org.js](https://github.com/todd-teese/salesforce-profile-generator/blob/v0.0.3/lib/commands/hello/org.js)_
 <!-- commandsstop -->
 <!-- debugging-your-plugin -->
 # Debugging your plugin

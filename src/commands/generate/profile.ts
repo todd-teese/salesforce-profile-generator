@@ -1,6 +1,8 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import { Messages, SfdxError } from '@salesforce/core';
 import { AnyJson } from '@salesforce/ts-types';
+import {fs}  from 'fs';
+import xml2js from 'xml2js';
 
 
 Messages.importMessagesDirectory(__dirname);
@@ -16,10 +18,23 @@ export default class Profile extends SfdxCommand {
         ignoreblank: flags.boolean({char: 'b', description: messages.getMessage('ignoreBlanksFlagDescription')}),
     };
 
-
     public async run(): Promise<AnyJson> {
         let generatedProfiles = [];
+        const source = this.flags.source;
+        const target = this.flags.target;
+        const ignoreblank = this.flags.ignoreblank;
+
+        if(!source) {
+            throw new SfdxError(messages.getMessage('errorNoSource'));
+        }
+        if(!target) {
+            throw new SfdxError(messages.getMessage('errorNoSource'));
+        }
 
         return JSON.stringify(generatedProfiles);
     }
+
+    // check directory exists
+
+    // check file exists
 }
