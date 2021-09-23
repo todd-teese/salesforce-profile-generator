@@ -2,7 +2,7 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import { Messages, SfdxError } from '@salesforce/core';
 import { AnyJson } from '@salesforce/ts-types';
 import fs = require('fs');
-import xml2js from 'xml2js';
+import xml2js = require('xml2js');
 
 
 Messages.importMessagesDirectory(__dirname);
@@ -32,7 +32,9 @@ export default class Profile extends SfdxCommand {
             throw new SfdxError(messages.getMessage('errorNoSource'));
         }
 
-        this.checkExists(source).then(() => {
+        console.log('Linked Version')
+
+        await this.checkExists(source).then(() => {
             profilePaths = this.getDirectory(source);
         }).catch(error => {
             throw new SfdxError(messages.getMessage('errorNoDirectoryFound'));
@@ -43,7 +45,7 @@ export default class Profile extends SfdxCommand {
         }
 
         for(const profilePath of profilePaths) {
-            const profile = {};
+            const profile = {name:profilePath};
             const profileFiles = this.getDirectory(source + '/' + profilePath);
             for(const profileFile of profileFiles) {
                 this.applyFileData(source + '/' + profilePath + '/' + profileFile, profileFile, profile);
@@ -89,12 +91,12 @@ export default class Profile extends SfdxCommand {
         const cleanRows = [];
         for(let i = 1; i < csvRows.length; i++) {
             if(!csvRows) {
-                console.log('empty');
                 continue;
             }
             const splitRow = csvRows[i].split(',');
             const cleanRow = {};
             for(let j = 0; j < headerAttributes.length; j++) {
+                // ignore blanks comes in here
                 if(splitRow[j]) {
                     cleanRow[headerAttributes[j]] = splitRow[j]
                 }
