@@ -4,6 +4,8 @@
     "targetFlagDescription": "Target Folder to create profiles in",
     "ignoreBlanksFlagDescription": "Ignore blanks within CSV files?",
     "errorNoSource": "No source folder found",
+    "errorNoDirectoryFound": "No Directory Exists",
+    "errorNoProfilesFound": "No Profiles Found",
     "errorNoTarget": "No target folder given",
     "errorInCsvParse": "Something went wrong in parsing a CSV file",
     "errorInJsonParse": "Something went wrong in parsing a JSON file",
