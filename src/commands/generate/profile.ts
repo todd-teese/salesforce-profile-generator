@@ -1,7 +1,7 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import { Messages, SfdxError } from '@salesforce/core';
 import { AnyJson } from '@salesforce/ts-types';
-import {fs}  from 'fs';
+import fs = require('fs');
 import xml2js from 'xml2js';
 
 
@@ -22,7 +22,8 @@ export default class Profile extends SfdxCommand {
         let generatedProfiles = [];
         const source = this.flags.source;
         const target = this.flags.target;
-        const ignoreblank = this.flags.ignoreblank;
+        // const ignoreblank = this.flags.ignoreblank;
+        let profilePaths;
 
         if(!source) {
             throw new SfdxError(messages.getMessage('errorNoSource'));
@@ -31,10 +32,102 @@ export default class Profile extends SfdxCommand {
             throw new SfdxError(messages.getMessage('errorNoSource'));
         }
 
+        this.checkExists(source).then(() => {
+            profilePaths = this.getDirectory(source);
+        }).catch(error => {
+            throw new SfdxError(messages.getMessage('errorNoDirectoryFound'));
+        })
+
+        if(!profilePaths) {
+            throw new SfdxError(messages.getMessage('errorNoProfilesFound'));
+        }
+
+        for(const profilePath of profilePaths) {
+            const profile = {};
+            const profileFiles = this.getDirectory(source + '/' + profilePath);
+            for(const profileFile of profileFiles) {
+                this.applyFileData(source + '/' + profilePath + '/' + profileFile, profileFile, profile);
+            }
+            this.createXml(target, profile);
+            generatedProfiles.push(profilePath);
+        }
+
         return JSON.stringify(generatedProfiles);
     }
 
     // check directory exists
+    private async checkExists(path):Promise<Boolean> {
+        try {
+            await fs.promises.access(path);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
 
+    // get profile folders
+    private getDirectory(path) {
+        return fs.readdirSync(path);
+    }
     // check file exists
+    private applyFileData(path, fileName, profile) {
+        let fileType = fileName.split('.')[1];
+        let attributeName = fileName.split('.')[0];
+        if(fileType == 'csv') {
+            this.applyCsvData(path, attributeName, profile);
+        }
+        if(fileType == 'json') {
+            this.applyJsonData(path, profile);
+        }
+    }
+
+    private applyCsvData(filePath, attributeName, profile) {
+        const csvData = fs.readFileSync(filePath, 'utf-8');
+        const csvRows = csvData.replace(/\r/g, '').split('\n');
+        const csvHeader = csvRows[0];
+        const headerAttributes = csvHeader.split(',');
+        const cleanRows = [];
+        for(let i = 1; i < csvRows.length; i++) {
+            if(!csvRows) {
+                console.log('empty');
+                continue;
+            }
+            const splitRow = csvRows[i].split(',');
+            const cleanRow = {};
+            for(let j = 0; j < headerAttributes.length; j++) {
+                if(splitRow[j]) {
+                    cleanRow[headerAttributes[j]] = splitRow[j]
+                }
+            }
+            cleanRows.push(cleanRow);
+    
+        }
+        profile[attributeName] = cleanRows;
+    }
+
+    private applyJsonData(filePath, profile) {
+        const jsonData = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+        const jsonKeys = Object.keys(jsonData);
+        for(const jsonKey of jsonKeys) {
+            if(!jsonKey || jsonData[jsonKey]) {
+                continue;
+            }
+            profile[jsonKey] = jsonData[jsonKey];
+        }
+    }
+
+    private createXml(targetPath, profile) {
+        let builder = new xml2js.Builder();
+        const profileDeRef = JSON.parse(JSON.stringify(profile));
+        delete profileDeRef.name;
+        let obj = {Profile: {
+            $: {
+                xmlns:"http://soap.sforce.com/2006/04/metadata"
+            },
+            _: profileDeRef
+        }};
+    
+        let xml = builder.buildObject(obj);
+        fs.writeFileSync(targetPath + '/' + profile.name + '.profile-meta.xml', xml);
+    }
 }
