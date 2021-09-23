@@ -1,0 +1,12 @@
+{
+    "commandDescription": "Generate profiles based on CSV and JSON Files",
+    "sourceFlagDescription": "Source Folder to pull profiles from",
+    "targetFlagDescription": "Target Folder to create profiles in",
+    "ignoreBlanksFlagDescription": "Ignore blanks within CSV files?",
+    "errorNoSource": "No source folder found",
+    "errorNoTarget": "No target folder given",
+    "errorInCsvParse": "Something went wrong in parsing a CSV file",
+    "errorInJsonParse": "Something went wrong in parsing a JSON file",
+    "errorInXmlGeneration": "Something went wrong in generating an XML file"
+  }
+  
