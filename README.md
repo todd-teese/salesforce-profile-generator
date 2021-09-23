@@ -22,7 +22,7 @@ $ npm install -g salesforce-profile-generator
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
-salesforce-profile-generator/0.0.3 linux-x64 node-v14.17.6
+salesforce-profile-generator/0.0.4 linux-x64 node-v14.17.6
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -91,8 +91,6 @@ EXAMPLES
   $ sfdx hello:org --name myname --targetusername myOrg@example.com
      Hello myname! This is org: MyOrg and I will be around until Tue Mar 20 2018!
 ```
-
-_See code: [lib/commands/hello/org.js](https://github.com/todd-teese/salesforce-profile-generator/blob/v0.0.3/lib/commands/hello/org.js)_
 <!-- commandsstop -->
 <!-- debugging-your-plugin -->
 # Debugging your plugin
