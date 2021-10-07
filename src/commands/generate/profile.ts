@@ -3,6 +3,7 @@ import { Messages, SfdxError } from '@salesforce/core';
 import { AnyJson } from '@salesforce/ts-types';
 import fs = require('fs');
 import xml2js = require('xml2js');
+import chalk = require('chalk');
 
 
 Messages.importMessagesDirectory(__dirname);
@@ -23,16 +24,15 @@ export default class Profile extends SfdxCommand {
         const source = this.flags.source;
         const target = this.flags.target;
         // const ignoreblank = this.flags.ignoreblank;
+
         let profilePaths;
 
         if(!source) {
             throw new SfdxError(messages.getMessage('errorNoSource'));
         }
         if(!target) {
-            throw new SfdxError(messages.getMessage('errorNoSource'));
+            throw new SfdxError(messages.getMessage('errorNoTarget'));
         }
-
-        console.log('Linked Version')
 
         await this.checkExists(source).then(() => {
             profilePaths = this.getDirectory(source);
@@ -51,6 +51,8 @@ export default class Profile extends SfdxCommand {
                 this.applyFileData(source + '/' + profilePath + '/' + profileFile, profileFile, profile);
             }
             this.createXml(target, profile);
+            console.log(chalk.green(profilePath + ' profile') + ' generated and saved to ' + chalk.green(target));
+
             generatedProfiles.push(profilePath);
         }
 
@@ -122,14 +124,22 @@ export default class Profile extends SfdxCommand {
         let builder = new xml2js.Builder();
         const profileDeRef = JSON.parse(JSON.stringify(profile));
         delete profileDeRef.name;
+
         let obj = {Profile: {
             $: {
                 xmlns:"http://soap.sforce.com/2006/04/metadata"
-            },
-            _: profileDeRef
-        }};
-    
+            }}
+        };
+        const objectKeys = Object.keys(profileDeRef);
+
+        for(let i = 0; i < objectKeys.length; i++) {
+            const objectKey = objectKeys[i];
+            obj.Profile[objectKey] = profileDeRef[objectKey];
+
+        }
+
         let xml = builder.buildObject(obj);
+        xml = xml.replace(/\[object Object\]/g, '');
         fs.writeFileSync(targetPath + '/' + profile.name + '.profile-meta.xml', xml);
     }
 }
