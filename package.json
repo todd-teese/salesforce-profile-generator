@@ -1,7 +1,7 @@
 {
   "name": "salesforce-profile-generator",
   "description": "An update on the profile generation tool",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "author": "Todd Teese",
   "bugs": "https://github.com/todd-teese/salesforce-profile-generator/issues",
   "dependencies": {

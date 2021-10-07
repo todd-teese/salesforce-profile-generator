@@ -46,7 +46,12 @@ export default class Profile extends SfdxCommand {
 
         for(const profilePath of profilePaths) {
             const profile = {name:profilePath};
+            const lsStat = fs.lstatSync(source + '/' + profilePath);
+            if(lsStat.isDirectory() == false) {
+                continue;
+            }
             const profileFiles = this.getDirectory(source + '/' + profilePath);
+
             for(const profileFile of profileFiles) {
                 this.applyFileData(source + '/' + profilePath + '/' + profileFile, profileFile, profile);
             }

@@ -13,7 +13,7 @@ An update on the profile generation tool
 [![License](https://img.shields.io/npm/l/salesforce-profile-generator.svg)](https://github.com/todd-teese/salesforce-profile-generator/blob/master/package.json)
 
 <!-- toc -->
-* [Debugging your plugin](#debugging-your-plugin)
+
 <!-- tocstop -->
 <!-- install -->
 <!-- usage -->
@@ -22,7 +22,7 @@ $ npm install -g salesforce-profile-generator
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
-salesforce-profile-generator/0.0.5 linux-x64 node-v14.17.6
+salesforce-profile-generator/0.0.7 linux-x64 node-v14.17.6
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -53,5 +53,5 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [lib/commands/generate/profile.js](https://github.com/todd-teese/salesforce-profile-generator/blob/v0.0.5/lib/commands/generate/profile.js)_
+_See code: [lib/commands/generate/profile.js](https://github.com/todd-teese/salesforce-profile-generator/blob/v0.0.7/lib/commands/generate/profile.js)_
 <!-- commandsstop -->
